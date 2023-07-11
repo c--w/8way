@@ -89,7 +89,7 @@ function initGame() {
 
 function fillWordList() {
     $('#all_words_div').empty();
-    all_guess_words_arr = Array.from(all_guess_words).sort(randomsort);
+    all_guess_words_arr = Array.from(all_guess_words).sort();
     all_guess_words_arr.forEach(word => {
         let div = $('<div>');
         div.html(word)
