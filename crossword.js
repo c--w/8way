@@ -9,7 +9,7 @@ const directions = [
     { x: -1, y: 1 },
     { x: -1, y: -1 }
 ]
-const all_leters = cdl("ABCČĆDDŽĐEFGHIJKLLJMNNJOPRSŠTUVZŽ");
+const all_leters = cdl("AEIOU");
 var grid;
 function fillBoard() { //instantiator object for making gameboards
     all_guess_words = new Set()
@@ -38,7 +38,7 @@ function fillBoard() { //instantiator object for making gameboards
             let l = grid[i][j];
             let div = $('<div>');
             if (l == '')
-                l = all_leters[Math.floor(rand() * 30) + 1];
+                l = all_leters[Math.floor(rand() * 5) + 1];
             div.html(l);
             div.addClass('letter');
             div.data('i', i * cols + j)

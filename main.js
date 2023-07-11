@@ -25,7 +25,7 @@ function init() {
     if (!gamemode) {// try cookie
         gamemode = Number(getCookie("gamemode"));
         level = Number(getCookie("level"));
-        size = getCookie("size") || "10*20";
+        size = getCookie("size") || "10*10";
     }
     if (isNaN(gamemode)) { // try select
         gamemode = $("#gamemode").val();
