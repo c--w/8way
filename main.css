@@ -1,7 +1,7 @@
 @import url("bootstrap-icons.css");
 
 html {
-    font-size: min(4vw, 26px);
+    font-size: min(3vmin, 24px);
 }
 
 :root {
