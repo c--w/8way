@@ -96,6 +96,7 @@ body {
     align-content: center;
     position: relative;
     border: 1px solid #555;
+    outline: 1px solid #555;
 }
 
 #all_words_div {
