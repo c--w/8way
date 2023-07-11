@@ -1,0 +1,150 @@
+@import url("bootstrap-icons.css");
+
+html {
+    font-size: min(4vw, 26px);
+}
+
+:root {
+    --border-light-color: #ccc;
+    --main-box-margin: 2px;
+    --inner-box-margin: 1px;
+    --box-border-width: 2px;
+}
+* {
+    transition: all .3s ease-out;
+    transition: transform .8s ease-out;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-weight: 900;
+    color: #444444;
+    background-color: beige;
+}
+
+#menu {
+    align-self: center;
+    width: auto;
+}
+
+.solved {
+    background-color: #bbb;
+}
+
+.found {
+    text-decoration: line-through;
+    background: #bbb;
+}
+.selected {
+    background-color: hsl(140 100% 40%);
+}
+
+.past-selected {
+    background-color: hsl(140 50% 40%);
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.winner {
+    background-color: goldenrod;
+    transition: all 0.5s cubic-bezier(0.5, -0.5, 0.5, 2);
+    border: 0;
+    box-shadow: 0px 0px 5vmin 0px gold;
+    border-radius: 5%;
+}
+.winner2 {
+    box-shadow: 0px 0px 1vmin 0px gold;
+    border: 2px solid gold !important;
+}
+.success {
+    background-color: goldenrod;
+    transition: all 0.25s cubic-bezier(0.5, -0.5, 0.5, 2);
+}
+
+.effect {
+    background-color: gray;
+    transition: all 0.1s cubic-bezier(0.5, -0.5, 0.5, 2);
+}
+
+#board_div {
+    margin-top: 2vh;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(1, min(6vw, 40px));
+    grid-template-rows: repeat(1, min(6vw, 40px));
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;    
+}
+
+#board_div div {
+    margin: 0;
+    color: #555;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bold;
+    transition: color 1.5s;
+    border: 0;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    position: relative;
+    border: 1px solid #555;
+}
+
+#all_words_div {
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+    flex-wrap: wrap;
+}
+
+#all_words_div div {
+    border: 1px dotted #555;
+    margin: 1vw;
+    padding: 1vw;
+}
+#clear_div {
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+}
+
+#stats {
+    font-size: min(3vmin, 18px);
+    font-weight: 400;
+    position: fixed;
+    bottom: 1.5vmax;
+    left: 1.5vmax;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 2vmin;
+    grid-row-gap: 0;
+    max-width: 25%;
+}
+
+#stats span:nth-child(even) {
+    text-align: end;
+}
+
+#seed {
+    font-weight: 400;
+    font-size: min(2.5vmax, 24px);
+    position: fixed;
+    bottom: 1.5vmax;
+    right: 1.5vmax;
+    cursor: pointer;
+    color: dodgerblue;
+}
+
+#share-url {
+    position: absolute;
+    top: -1000px;
+}
