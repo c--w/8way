@@ -38,7 +38,7 @@ function fillBoard() { //instantiator object for making gameboards
             let l = grid[i][j];
             let div = $('<div>');
             if (l == '')
-                l = all_leters[Math.floor(rand() * 5) + 1];
+                l = all_leters[Math.floor(rand() * 5)];
             div.html(l);
             div.addClass('letter');
             div.data('i', i * cols + j)
