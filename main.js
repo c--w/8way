@@ -81,8 +81,12 @@ function initGame() {
     var url = window.location.origin + window.location.pathname + "#" + seed_url;
     $("#share-url").val(url);
     $("#seed").attr('title', startseed);
-    fillBoard();
-    fillWordList();
+    $('#loading').css('display', 'flex');
+    $('#board_div').empty();
+    setTimeout(() => {
+        fillBoard();
+        fillWordList();
+    })
     updateStats();
     start_time = Date.now();
 }

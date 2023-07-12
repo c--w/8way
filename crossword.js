@@ -9,12 +9,10 @@ const directions = [
     { x: -1, y: 1 },
     { x: -1, y: -1 }
 ]
-const all_leters = cdl("ABCDEFGHIOU");
 var grid;
 var letter_count;
 function fillBoard() { //instantiator object for making gameboards
     all_guess_words = new Set();
-    $('#board_div').empty();
     grid = new Array(rows); //create 2 dimensional array for letter grid
     for (var i = 0; i < rows; i++) {
         grid[i] = new Array(cols);
@@ -25,10 +23,13 @@ function fillBoard() { //instantiator object for making gameboards
     letter_count = rows * cols;
     let word;
     let tries = 0;
-    while (tries < 100) {
+    while (tries < 1000) {
         let word;
         while (true) {
-            word = getRandomWord();
+            if(letter_count<20 || tries>100) {
+                word = getRandomWord(4);
+            } else
+                word = getRandomWord();
             if (!all_guess_words.has(word.join('')))
                 break;
         }
@@ -54,6 +55,7 @@ function fillBoard() { //instantiator object for making gameboards
         solution = cdl("Bravo!");
         $('#solution').html(solution.join(''));
     }
+    $('#loading').hide();
     for (var i = 0; i < rows; i++) {
         for (var j = 0; j < cols; j++) {
             let l = grid[i][j];
@@ -71,7 +73,8 @@ function fillBoard() { //instantiator object for making gameboards
             $('#board_div').append(div);
         }
     }
-    console.table(grid);
+    if(window.location.hostname == 'localhost')
+        console.table(grid);
 }
 function placeWord(word, xf, yf) { // return 0 on success, 1 on failure to place word
     let best_score = -1;
