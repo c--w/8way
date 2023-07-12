@@ -24,6 +24,7 @@ body {
     font-weight: 900;
     color: #444444;
     background-color: beige;
+    background-attachment: fixed;
 }
 
 #menu {
@@ -31,12 +32,13 @@ body {
     width: auto;
 }
 
-.solved, .found {
+.solved, #all_words_div div.found {
     background-color: #ccc;
 }
 
 .found {
-    text-decoration: line-through;
+    text-decoration: line-through #5558;
+    text-decoration-thickness: 1px;
 }
 
 .selected {
@@ -103,12 +105,14 @@ body {
     justify-content: center;
     margin-top: 2vh;
     flex-wrap: wrap;
+    z-index: 1;
 }
 
 #all_words_div div {
     border: 1px dotted #555;
     margin: 1vw;
-    padding: 1vw;
+    padding: 0 1vw;
+    background-color: #eee8;
 }
 #clear_div {
     display: flex;
