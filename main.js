@@ -47,8 +47,8 @@ function init() {
     $("#level").on("change", changeGame);
     $("#size").on("change", changeGame);
     changeGame();
-    window.onresize = function() {
-        if(gamemode > 7)
+    window.onresize = function () {
+        if (gamemode > 7)
             calculateCSS();
     }
 }
@@ -124,51 +124,92 @@ function handleClick(event) {
             }
             return;
         }
-        $('.letter.selected').removeClass('selected').addClass('past-selected')
+        if (!isStraight(el))
+            return;
+        $('.letter.selected').removeClass('selected').addClass('past-selected');
         el.addClass('selected');
+        isWholeWordSelected(el);
         last_selected = el;
         undo_stack.push(el.data('l'));
         undo_stack_elem.push(el);
-            let word = undo_stack.join('');
-            if (undo_stack.length >= 4 && all_guess_words.has(word)) {
+        let word = undo_stack.join('');
+        if (undo_stack.length >= 4 && all_guess_words.has(word)) {
+            setTimeout(() => {
+                $('.selected,.past-selected').addClass('success');
+            }, 0);
+            all_guess_words.delete(word);
+            let div = $('#all_words_div div').toArray().find(div => div.innerHTML == word);
+            $(div).addClass('found');
+            $('.selected,.past-selected').addClass('solved');
+            setTimeout(() => {
+                $('.selected,.past-selected').removeClass('success');
+                $('.selected,.past-selected').removeClass('selected past-selected');
+            }, 1000);
+            if (all_guess_words.size == 0) {
                 setTimeout(() => {
-                    $('.selected,.past-selected').addClass('success');
-                }, 0);
+                    $('.solution').addClass('winner');
+                }, 1000)
+                games++;
+                last_time = Math.round((Date.now() - start_time) / 1000);
+                total_time += last_time;
+                $('#solution').css('display', 'flex');
                 setTimeout(() => {
-                    $('.selected,.past-selected').removeClass('success');
-                }, 1000);
-                all_guess_words.delete(word);
-                let div = $('#all_words_div div').toArray().find(div => div.innerHTML == word);
-                $(div).addClass('found');
-                $('.selected,.past-selected').addClass('solved');
-                if (all_guess_words.size == 0) {
-                    setTimeout(() => {
-                        $('#all_words_div > div').addClass('winner2');
-                    }, 500)
-                    games++;
-                    last_time = Math.round((Date.now() - start_time) / 1000);
-                    total_time += last_time;
-                    setTimeout(initGame, 3000);
-                } else {
-                    setTimeout(reset, 1000);
-                }
-            } else if (undo_stack.length == letters) {
+                    $('#solution').hide();
+                }, 4000)
+                setTimeout(reset, 2000);
+                setTimeout(initGame, 4000);
+            } else {
                 setTimeout(reset, 1000);
-            } else if (undo_stack.length >= 4 && all_guess_words_arr.find(w => w == word)) {
-                setTimeout(() => {
-                    $('.selected,.past-selected').addClass('success');
-                }, 0);
-                setTimeout(() => {
-                    $('.selected,.past-selected').removeClass('success');
-                }, 300);
             }
+        } else if (undo_stack.length == letters) {
+            setTimeout(reset, 1000);
+        } 
+    }
+}
+
+function isStraight(el) {
+    let len = undo_stack.length;
+    if (len < 2)
+        return true;
+    let dxp = undo_stack_elem[len - 1].data('x') - undo_stack_elem[len - 2].data('x');
+    let dyp = undo_stack_elem[len - 1].data('y') - undo_stack_elem[len - 2].data('y');
+    let dx = el.data('x') - undo_stack_elem[len - 1].data('x');
+    let dy = el.data('y') - undo_stack_elem[len - 1].data('y');
+    if (dxp != dx || dyp != dy)
+        return false;
+    return true;
+}
+
+function isWholeWordSelected(el) {
+    let len = undo_stack.length;
+    if (len < 1)
+        return;
+    let dx = el.data('x') - undo_stack_elem[len - 1].data('x');
+    let dy = el.data('y') - undo_stack_elem[len - 1].data('y');
+    if (!(Math.abs(dx) > 1 && dy == 0 || dx == 0 && Math.abs(dy) > 1 || Math.abs(dx) == Math.abs(dy)))
+        return;
+    dx = Math.sign(dx);
+    dy = Math.sign(dy);
+    let start_x = undo_stack_elem[len - 1].data('x') + dx;
+    let start_y = undo_stack_elem[len - 1].data('y') + dy;
+    let end_x = el.data('x');
+    let end_y = el.data('y');
+    var all_divs = $('.letter').toArray();
+    while (start_x != end_x || start_y != end_y) {
+        let ind = start_y * cols + start_x;
+        let current = $(all_divs[ind]);
+        current.addClass('past-selected');
+        undo_stack.push(current.data('l'));
+        undo_stack_elem.push(current);
+        start_x += dx;
+        start_y += dy;
     }
 }
 function reset() {
     undo_stack = [];
     undo_stack_elem = [];
     last_selected = null;
-    $('.letter').removeClass('selected').removeClass('past-selected')
+    $('.letter').removeClass('selected past-selected');
 }
 
 function rand() {
@@ -197,14 +238,17 @@ function initSeed() {
 
 
 var dw;
-function getRandomWord() {
+function getRandomWord(length) {
     if (level == 1) dw = hrdict1;
     else if (level == 2) dw = hrdict2;
     else if (level == 3) dw = hrdict3;
     else if (level == 4) dw = endict;
     let filtered = dw.filter((word) => {
         word = cdl(word);
-        return word.length <= letters;
+        if (length)
+            return word.length == length;
+        else
+            return word.length <= letters;
     });
     let i = Math.floor(rand() * filtered.length);
     let word = filtered[i];

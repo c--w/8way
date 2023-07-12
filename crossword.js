@@ -9,10 +9,11 @@ const directions = [
     { x: -1, y: 1 },
     { x: -1, y: -1 }
 ]
-const all_leters = cdl("AEIOU");
+const all_leters = cdl("ABCDEFGHIOU");
 var grid;
+var letter_count;
 function fillBoard() { //instantiator object for making gameboards
-    all_guess_words = new Set()
+    all_guess_words = new Set();
     $('#board_div').empty();
     grid = new Array(rows); //create 2 dimensional array for letter grid
     for (var i = 0; i < rows; i++) {
@@ -21,6 +22,7 @@ function fillBoard() { //instantiator object for making gameboards
             grid[i][j] = '';
         }
     }
+    letter_count = rows * cols;
     let word;
     let tries = 0;
     while (tries < 100) {
@@ -31,24 +33,44 @@ function fillBoard() { //instantiator object for making gameboards
                 break;
         }
         tries = tries + placeWord(word);
+        if (letter_count < 8)
+            break;
     }
     calculateCSS();
+    let solution;
+    if(letter_count>3) {
+        if(letter_count<8) {
+            solution = getRandomWord(letter_count);
+            $('#solution').html(solution.join(''));
+        } else {
+            let word1 = getRandomWord(4);
+            let word2 = getRandomWord(letter_count-4);
+            $('#solution').html(word1.join('')+' '+word2.join(''))
+            solution = word1.push(...word2);
+        }
+    } else {
+        solution = cdl("Bravo!");
+        $('#solution').html(solution.join(''));
+    }
     for (var i = 0; i < rows; i++) {
         for (var j = 0; j < cols; j++) {
             let l = grid[i][j];
             let div = $('<div>');
-            if (l == '')
-                l = all_leters[Math.floor(rand() * 5)];
+            if (l == '') {
+                l = solution.splice(0, 1)[0];
+                div.addClass("solution");
+            }
             div.html(l);
             div.addClass('letter');
-            div.data('i', i * cols + j)
-            div.data('l', l)
+            div.data('i', i * cols + j);
+            div.data('x', j);
+            div.data('y', i);
+            div.data('l', l);
             $('#board_div').append(div);
         }
     }
     console.table(grid);
 }
-
 function placeWord(word, xf, yf) { // return 0 on success, 1 on failure to place word
     let best_score = -1;
     let best_coord = { x: 0, y: 0, dir: null };
@@ -92,7 +114,11 @@ function placeWord(word, xf, yf) { // return 0 on success, 1 on failure to place
     }
     for (let i = 0; i < word.length; i++) {
         c = word[i];
-        grid[best_coord.y + i * best_coord.dir.y][best_coord.x + i * best_coord.dir.x] = c;
+        let x = best_coord.x + i * best_coord.dir.x;
+        let y = best_coord.y + i * best_coord.dir.y;
+        if (!grid[y][x])
+            letter_count--;
+        grid[y][x] = c;
     }
     return 0;
 }
