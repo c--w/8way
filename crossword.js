@@ -43,10 +43,12 @@ function fillBoard() { //instantiator object for making gameboards
             solution = getRandomWord(letter_count);
             $('#solution').html(solution.join(''));
         } else {
-            let word1 = getRandomWord(4);
-            let word2 = getRandomWord(letter_count-4);
+            let num = Math.floor(letter_count / 2);
+            let word1 = getRandomWord(num);
+            let word2 = getRandomWord(letter_count-num);
             $('#solution').html(word1.join('')+' '+word2.join(''))
-            solution = word1.push(...word2);
+            word1.push(...word2);
+            solution = word1;
         }
     } else {
         solution = cdl("Bravo!");
