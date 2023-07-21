@@ -16,8 +16,10 @@ var size;
 var cols;
 var rows;
 var last_selected;
-var css_transforms = new Array(7);
+const VERSION = "v1.1";
+
 function init() {
+    $('#version').text(VERSION);
     let board_div = document.querySelector("#board_div");
     board_div.onmousedown = (event) => handleClick(event);
     board_div.ontouchstart = (event) => handleClick(event);
@@ -61,10 +63,12 @@ function changeGame() {
         letters = gamemode;
     setCookie("gamemode", gamemode, 730);
     level = $("#level").val();
+    setup_dw();
     setCookie("level", level, 730);
     size = $("#size").val();
     setCookie("size", size, 730);
     [cols, rows] = size.split('*');
+    [cols, rows] = [Number(cols), Number(rows)];
     last_time = 0;
     total_time = 0;
     games = 0;
@@ -242,11 +246,13 @@ function initSeed() {
 
 
 var dw;
-function getRandomWord(length) {
+function setup_dw() {
     if (level == 1) dw = hrdict1;
     else if (level == 2) dw = hrdict2;
     else if (level == 3) dw = hrdict3;
     else if (level == 4) dw = endict;
+}
+function getRandomWord(length) {
     let filtered = dw.filter((word) => {
         word = cdl(word);
         if (length)

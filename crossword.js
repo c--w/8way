@@ -26,7 +26,7 @@ function fillBoard() { //instantiator object for making gameboards
     while (tries < 1000) {
         let word;
         while (true) {
-            if(letter_count<20 || tries>100) {
+            if (letter_count < 20 || tries > 100) {
                 word = getRandomWord(4);
             } else
                 word = getRandomWord();
@@ -39,15 +39,15 @@ function fillBoard() { //instantiator object for making gameboards
     }
     calculateCSS();
     let solution;
-    if(letter_count>3) {
-        if(letter_count<8) {
+    if (letter_count > 3) {
+        if (letter_count < 8) {
             solution = getRandomWord(letter_count);
             $('#solution').html(solution.join(''));
         } else {
             let num = Math.floor(letter_count / 2);
             let word1 = getRandomWord(num);
-            let word2 = getRandomWord(letter_count-num);
-            $('#solution').html(word1.join('')+' '+word2.join(''))
+            let word2 = getRandomWord(letter_count - num);
+            $('#solution').html(word1.join('') + ' ' + word2.join(''))
             word1.push(...word2);
             solution = word1;
         }
@@ -73,7 +73,7 @@ function fillBoard() { //instantiator object for making gameboards
             $('#board_div').append(div);
         }
     }
-    if(window.location.hostname == 'localhost')
+    if (window.location.hostname == 'localhost')
         console.table(grid);
 }
 function placeWord(word, xf, yf) { // return 0 on success, 1 on failure to place word
@@ -134,5 +134,6 @@ function calculateCSS() {
         width = 80;
     $('#board_div').css("grid-template-columns", "repeat(" + cols + ", " + width + "px)");
     $('#board_div').css("grid-template-rows", "repeat(" + rows + ", " + width + "px)");
-    $('#board_div').css("font-size", width / 2 + "px");
+    $('#board_div').css("font-size", width / 1.6 + "px");
 }
+

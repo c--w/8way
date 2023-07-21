@@ -2,14 +2,6 @@
 <html>
 
 <head>
-  <script>
-    if (navigator.serviceWorker) {
-      navigator.serviceWorker.register(
-        '/8way/service_w.js?r=' + Math.random(),
-        { scope: '/8way/' }
-      )
-    }
-  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Osmosmjerka</title>
@@ -64,6 +56,9 @@
     <span>μ: </span><span id="avg"></span>
     <span>min μ (<span id="best-games"></span>):</span><span id="best"></span>
   </div>
+  <div id="version" onclick="location.reload(true)">
+  </div>
+
   <div id="seed" onclick="share()">
     <i class="bi bi-share"></i>
   </div>

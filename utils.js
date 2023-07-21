@@ -38,6 +38,8 @@ function is_touch_enabled() {
 }
 
 function cdl(s) {
+    if(level==4)
+        return s.split('');
     var result = [];
     let tmp = s.split(/(NJ|LJ|DŽ)/);
     tmp.forEach((a) => {
