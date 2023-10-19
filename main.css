@@ -139,6 +139,7 @@ body {
     grid-column-gap: 2vmin;
     grid-row-gap: 0;
     max-width: 25%;
+    z-index: 0;
 }
 
 #stats span:nth-child(even) {
@@ -158,6 +159,7 @@ body {
 #version {
     font-size: min(3vmin, 18px);
     right: 50vw;
+    z-index: 2;
 }
 
 #share-url {

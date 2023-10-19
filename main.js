@@ -16,7 +16,7 @@ var size;
 var cols;
 var rows;
 var last_selected;
-const VERSION = "v1.2";
+const VERSION = "v1.3";
 
 function init() {
     $('#version').text(VERSION);
