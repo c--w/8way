@@ -16,28 +16,18 @@ var size;
 var cols;
 var rows;
 var last_selected;
-const VERSION = "v1.1";
+const VERSION = "v1.2";
 
 function init() {
     $('#version').text(VERSION);
     let board_div = document.querySelector("#board_div");
-    board_div.onmousedown = (event) => handleClick(event);
-    board_div.ontouchstart = (event) => handleClick(event);
+    board_div.onclick = (event) => handleClick(event);
+
     initSeed();
-    if (!gamemode) {// try cookie
-        gamemode = Number(getCookie("gamemode"));
-        level = Number(getCookie("level"));
-        size = getCookie("size") || "10*10";
-    }
-    if (isNaN(gamemode)) { // try select
-        gamemode = $("#gamemode").val();
-        level = $("#level").val();
-        size = $("#size").val();
-    }
-    if (gamemode < 4)
-        gamemode = 7;
-    if (level < 1)
-        level = 1;
+    resolve('gamemode', true);
+    resolve('level', true);
+    resolve('size');
+    console.log(size);
     [cols, rows] = size.split('*');
     $("#gamemode").val(gamemode);
     $("#level").val(level);
@@ -106,10 +96,6 @@ function fillWordList() {
 }
 var click_time = 0;
 function handleClick(event) {
-    if (event.stopPropagation) {
-        event.stopPropagation();
-        event.preventDefault();
-    }
     if (Date.now() - click_time < 100)
         return false;
     click_time = Date.now();
@@ -301,4 +287,28 @@ function updateStats() {
 
 function randomsort(a, b) {
     return Math.random() * 2 - 1;
+}
+
+function resolve(prop, num) {
+    let value = window[prop];
+    if (typeof value == 'undefined') {
+        value = getCookie(prop);
+        if (!value) {
+            value = $('#' + prop).val();
+            window[prop] = value;
+            return;
+        }
+    }
+    let options = $('#' + prop + ' option');
+    let values = $.map(options, function (option) {
+        return option.value;
+    });
+    if (values.indexOf("" + value) == -1) {
+        value = values[0];
+    }
+    if (num)
+        value = Number(value);
+    window[prop] = value;
+    $('#' + prop).val(value);
+    setCookie(prop, value, 730);
 }
