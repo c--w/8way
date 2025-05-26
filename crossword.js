@@ -1,27 +1,28 @@
 const border_light_color = 'var(--border-light-color)';
-const directions = [
-    { x: 1, y: 0 },
-    { x: 0, y: 1 },
+const directions1 = [
+    { x: -1, y: -1 },
+    { x: -1, y: 1 },
+    { x: 1, y: -1 },
+    { x: 1, y: 1 }
+]
+const directions2 = [
     { x: -1, y: 0 },
     { x: 0, y: -1 },
-    { x: 1, y: 1 },
-    { x: 1, y: -1 },
-    { x: -1, y: 1 },
-    { x: -1, y: -1 }
+    { x: 1, y: 0 },
+    { x: 0, y: 1 }
 ]
 var grid;
 var letter_count;
 function fillBoard() { //instantiator object for making gameboards
     all_guess_words = new Set();
     grid = new Array(rows); //create 2 dimensional array for letter grid
-    for (var i = 0; i < rows; i++) {
+    for (let i = 0; i < rows; i++) {
         grid[i] = new Array(cols);
-        for (var j = 0; j < cols; j++) {
+        for (let j = 0; j < cols; j++) {
             grid[i][j] = '';
         }
     }
     letter_count = rows * cols;
-    let word;
     let tries = 0;
     while (tries < 1000) {
         let word;
@@ -76,38 +77,41 @@ function fillBoard() { //instantiator object for making gameboards
     if (window.location.hostname == 'localhost')
         console.table(grid);
 }
-function placeWord(word, xf, yf) { // return 0 on success, 1 on failure to place word
+function placeWord(word) { // return 0 on success, 1 on failure to place word
     let best_score = -1;
     let best_coord = { x: 0, y: 0, dir: null };
-    for (var y = 0; y < rows; y++) {
-        for (var x = 0; x < cols; x++) {
-            let score, dir;
-            let offset = Math.floor(rand() * 8);
-            for (var k = 0; k < directions.length; k++) {
-                score = 0;
-                dir = directions[(k * 47 + offset) % 8];
-                for (let i = 0; i < word.length; i++) {
-                    let c = word[i];
-                    let xx = x + i * dir.x;
-                    let yy = y + i * dir.y;
-                    if (xx < 0 || xx >= cols || yy < 0 || yy >= rows) {
-                        score = -1;
-                        break;
-                    }
-                    if (grid[yy][xx] == c) {
-                        score++;
-                    } else if (grid[yy][xx] != '') { // clash with another word
-                        score = -1;
-                        break;
-                    }
-                }
-                if (score > best_score) {
-                    best_score = score;
-                    best_coord.x = x;
-                    best_coord.y = y;
-                    best_coord.dir = dir;
+    let fields_num = rows * cols;
+    let offset_field = Math.floor(rand() * fields_num);
+    for (let counter = 0; counter < fields_num; counter++) {
+        let ind = (counter * 103 + offset_field) % fields_num;
+        let y = Math.floor(ind / cols);
+        let x = ind % cols;
 
+        let directions = [...directions1.sort(randomsort), ...directions2.sort(randomsort)];
+        let score;
+        for (let dir of directions) {
+            score = 0;
+            for (let i = 0; i < word.length; i++) {
+                let c = word[i];
+                let xx = x + i * dir.x;
+                let yy = y + i * dir.y;
+                if (xx < 0 || xx >= cols || yy < 0 || yy >= rows) {
+                    score = -1;
+                    break;
                 }
+                if (grid[yy][xx] == c) {
+                    score++;
+                } else if (grid[yy][xx] != '') { // clash with another word
+                    score = -1;
+                    break;
+                }
+            }
+            if (score > best_score) {
+                best_score = score;
+                best_coord.x = x;
+                best_coord.y = y;
+                best_coord.dir = dir;
+
             }
         }
     }
@@ -118,13 +122,14 @@ function placeWord(word, xf, yf) { // return 0 on success, 1 on failure to place
         all_guess_words.add(word.join(''));
     }
     for (let i = 0; i < word.length; i++) {
-        c = word[i];
+        let c = word[i];
         let x = best_coord.x + i * best_coord.dir.x;
         let y = best_coord.y + i * best_coord.dir.y;
         if (!grid[y][x])
             letter_count--;
         grid[y][x] = c;
     }
+    console.log(best_coord.dir, word);
     return 0;
 }
 
@@ -137,3 +142,6 @@ function calculateCSS() {
     $('#board_div').css("font-size", width / 1.6 + "px");
 }
 
+function randomsort(a, b) {
+    return rand() * 2 - 1;
+}

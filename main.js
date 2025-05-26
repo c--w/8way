@@ -157,7 +157,7 @@ function handleClick(event) {
             }
         } else if (undo_stack.length == letters) {
             setTimeout(reset, 1000);
-        } 
+        }
     }
 }
 
@@ -283,10 +283,6 @@ function updateStats() {
     localStorage.setItem(key, best);
     $("#best-games").text(games);
     $("#best").text(best);
-}
-
-function randomsort(a, b) {
-    return Math.random() * 2 - 1;
 }
 
 function resolve(prop, num) {
