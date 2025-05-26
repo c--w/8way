@@ -39,6 +39,9 @@
       <option value="20*10">20*10</option>
       <option value="20*20">20*20</option>
     </select>
+    <button type="button" id="help-button" class="btn btn-outline-secondary" title="Pomoć" onclick="$('#help-panel, #help-panel-overlay').show();">
+      <i class="bi bi-question-circle"></i>
+      </select>
   </div>
   <div id="loading">
     <div class="spinner-border text-success" role="status">
@@ -63,6 +66,49 @@
     <i class="bi bi-share"></i>
   </div>
   <input id="share-url" type="text">
+
+  <!-- Help Panel Overlay -->
+  <div id="help-panel-overlay" onclick="$('#help-panel, #help-panel-overlay').hide();"></div>
+
+  <!-- Help Panel Modal -->
+  <div id="help-panel" class="card shadow-lg">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Kako igrati Osmosmjerku</h5>
+      <button type="button" class="btn-close" aria-label="Zatvori" id="close-help-panel-header" onclick="$('#help-panel, #help-panel-overlay').hide();"></button>
+    </div>
+    <div class="card-body">
+      <p><strong>Cilj igre:</strong> Pronađite sve riječi s popisa skrivene u mreži slova.</p>
+      <p>Riječi mogu biti napisane vodoravno, okomito ili dijagonalno, u svim mogućim smjerovima (naprijed, natrag, gore, dolje).</p>
+
+      <h6>Kako označiti riječ:</h6>
+      <p>Kliknite na prvo slovo željene riječi u mreži i na zadnje slovo te riječi. Ako je riječ ispravno označena i nalazi se na popisu, bit će prekrižena na popisu i istaknuta na ploči.</p>
+
+      <h6>Meni s opcijama (gore):</h6>
+      <ul>
+        <li><strong>Gamemode (Dužina riječi):</strong> Odaberite maksimalnu dužinu riječi koje će se tražiti (npr. "do 7 slova" znači da će riječi imati najviše 7 slova).</li>
+        <li><strong>Level (Nivo):</strong> Odaberite težinu ili rječnik. "Eng. riječi" koristi engleski rječnik.</li>
+        <li><strong>Size (Veličina):</strong> Odaberite dimenzije mreže (npr. "10*10" je mreža s 10 redaka i 10 stupaca).</li>
+      </ul>
+
+      <h6>Ostale kontrole:</h6>
+      <ul>
+        <li><span class="badge bg-light text-dark p-1 me-1"><i class="bi bi-x-circle"></i></span> <strong>Poništi odabir:</strong> Brisanje trenutno označene linije na ploči.</li>
+        <li><span class="badge bg-light text-dark p-1 me-1"><i class="bi bi-share"></i></span> <strong>Podijeli igru:</strong> Generira link za dijeljenje trenutne osmosmjerke.</li>
+        <li><strong>Popis riječi:</strong> Ispod ploče prikazuju se riječi koje treba pronaći.</li>
+      </ul>
+      <h6>Statistika:</h6>
+      <ul>
+        <li><strong>N:</strong> Ukupan broj odigranih igara.</li>
+        <li><strong>T:</strong> Vrijeme posljednje igre.</li>
+        <li><strong>Σ:</strong> Ukupno vrijeme igranja.</li>
+        <li><strong>μ:</strong> Prosječno vrijeme po igri.</li>
+        <li><strong>min μ:</strong> Najbolje prosječno vrijeme (uz broj igara za taj prosjek).</li>
+      </ul>
+      <div class="text-end mt-3">
+        <button id="close-help-panel-button" class="btn btn-primary" onclick="$('#help-panel, #help-panel-overlay').hide();">Zatvori</button>
+      </div>
+    </div>
+  </div>
 
   <script src="jquery-3.6.4.min.js"></script>
   <script src="bootstrap.min.js"></script>
